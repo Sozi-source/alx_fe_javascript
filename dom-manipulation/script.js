@@ -22,7 +22,7 @@ console.log(quotes[randomIndex])
 
 const newQuoteText = document.getElementById("newQuoteText")
 const newQuoteCategory = document.getElementById ("newQuoteCategory")
-const addQuote = this.documentElement ("addQuote")
+const addQuote = document.getElementById("addQuote")
 
 
 
