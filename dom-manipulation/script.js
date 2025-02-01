@@ -14,7 +14,9 @@ const quotes = [
     { text: "Don't watch the clock; do what it does. Keep going.", category: "Hard Work" }
 ];
 
-
+function showRandomQuote (){
+    
+}
 const randomIndex = Math.floor(Math.random()* quotes.length)
 console.log(quotes[randomIndex])
 
@@ -36,7 +38,7 @@ if (newQuote !== "" && newCategory !==""){
     newWElement.textContent = `"${newQuote}"~ ${newCategory}  `
     quoteDisplay.appendChild(newWElement)
 
-    
+
 }
 else {
     alert("please fill in the right content")
