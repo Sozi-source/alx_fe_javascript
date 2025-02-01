@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", function(){
 
 // Quotes Array
-const quotes = [
+// Load quotes from localStorage or use default quotes
+const quotes =   [
     { text: "The only way to do great work is to love what you do.", category: "Motivation" },
     { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", category: "Success" },
     { text: "Happiness depends upon ourselves.", category: "Happiness" },
@@ -98,6 +99,36 @@ function createAddQuoteForm (){
 // Event Listeners
 addQuote.addEventListener("click", addNewQuotes)
 addQuote.addEventListener("click", showRandomQuote)
+
+
+// Implementing Web Storage and JSON Handling
+
+// Function to Save Quotes to Local Storage
+function saveQuotesToLocalStorage (){
+    localStorage.setItem("quotes", JSON.stringify(quotes))
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 })
 
