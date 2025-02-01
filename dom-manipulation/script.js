@@ -59,8 +59,43 @@ if (newQuote !== "" && newCategory !==""){
 else {
     alert("please fill in the right content")
 }
-// Event Listeners
+
 }
+
+// Creat add quote form
+function createAddQuoteForm (){
+
+    const formContainer = document.createElement ("div");
+
+    // quote input
+    const quoteInput = document.createElement ("input")
+    quoteInput.setAttribute ("id", "newQuoteText")
+    quoteInput.setAttribute ("name", "newQuoteText")
+    quoteInput.setAttribute ("placeholder", "enter a new quote")
+
+    // quote category
+    const quoteCategory = document.createElement ("input")
+    quoteCategory.setAttribute ("id", "newQuoteCategory")
+    quoteCategory.setAttribute ("name", "newQuoteCategory")
+    quoteCategory.setAttribute ("placeholder", "enter quote categoty")
+
+      // Add Quote Button
+      const newQuoteButton = document.createElement ("button")
+      newQuoteButton.textContent = "Add Quote"
+      newQuoteButton.addEventListener = ("click", addQuote)
+
+       // Append Elements to Form Container
+       formContainer.appendChild(quoteInput)
+       formContainer.appendChild(quoteCategory)
+       formContainer.appendChild(newQuoteButton)
+       
+        // Add Form to Body (or another container)
+ const formbody =document.createElement("body")
+ formbody.appendChild(formContainer)
+}
+
+
+// Event Listeners
 addQuote.addEventListener("click", addNewQuotes)
 addQuote.addEventListener("click", showRandomQuote)
 
