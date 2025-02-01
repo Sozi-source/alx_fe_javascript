@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
 
-
+// Quotes Array
 const quotes = [
     { text: "The only way to do great work is to love what you do.", category: "Motivation" },
     { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", category: "Success" },
@@ -13,19 +13,25 @@ const quotes = [
     { text: "The purpose of our lives is to be happy.", category: "Life" },
     { text: "Don't watch the clock; do what it does. Keep going.", category: "Hard Work" }
 ];
-
+// Function to Show a Random Quote
 function showRandomQuote (){
-    
-}
-const randomIndex = Math.floor(Math.random()* quotes.length)
-console.log(quotes[randomIndex])
+const displayRandomQuotes = document.getElementById("quoteDisplay")
 
+const randomIndex = Math.floor(Math.random()* quotes.length)
+const randomQuotes = quotes[randomIndex];
+
+
+    // Update the quote display
+
+    displayRandomQuotes.innerHTML = `"${randomQuotes.text}" - ${randomQuotes.category} `
+}
 
 
 const newQuoteText = document.getElementById("newQuoteText")
 const newQuoteCategory = document.getElementById ("newQuoteCategory")
 const addQuote = document.getElementById("addQuote")
 const quoteDisplay = document.getElementById ("quoteDisplay")
+const newQuotes = document.getElementById ("newQuote")
 
 
 // add new quotes
@@ -39,13 +45,24 @@ if (newQuote !== "" && newCategory !==""){
     quoteDisplay.appendChild(newWElement)
 
 
+    // add quotes to the array
+
+    quotes.push(newWElement)
+    
+    newQuoteText.value = "";
+    newQuoteCategory.value = "";
+
+    alert("Quote added successfully")
+
+
 }
 else {
     alert("please fill in the right content")
 }
-
+// Event Listeners
 }
 addQuote.addEventListener("click", addNewQuotes)
+addQuote.addEventListener("click", showRandomQuote)
 
 })
 
