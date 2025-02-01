@@ -23,6 +23,7 @@ console.log(quotes[randomIndex])
 const newQuoteText = document.getElementById("newQuoteText")
 const newQuoteCategory = document.getElementById ("newQuoteCategory")
 const addQuote = document.getElementById("addQuote")
+const quoteDisplay = document.getElementById ("quoteDisplay")
 
 
 // add new quotes
@@ -31,14 +32,18 @@ function addNewQuotes (){
     const newCategory = newQuoteCategory.value.trim()
 
 if (newQuote !== "" && newCategory !==""){
+    const newWElement = document.createElement ("li")
+    newWElement.textContent = `"${newQuote}"~ ${newCategory}  `
+    quoteDisplay.appendChild(newWElement)
+
     
 }
-
-
-
-
+else {
+    alert("please fill in the right content")
+}
 
 }
+addQuote.addEventListener("click", addNewQuotes)
 
 })
 

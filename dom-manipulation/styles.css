@@ -1,0 +1,44 @@
+body {
+    padding: 40px;
+}
+
+
+
+h1 {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 25px;
+    color: brown;
+}
+#quoteDisplay {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 15px;
+    color: green;
+}
+
+#newQuoteText {
+width: 400px;
+min-height: 20px;
+padding-bottom: 50px;
+color: plum;
+}
+
+#newQuoteCategory {
+width: 400px;
+height: 20px;
+padding-bottom: 50px;  
+margin-top: 15px;
+color: plum;
+}
+
+#addQuote {
+width: 100px;
+height: 40px;
+margin-top: 15px;
+border-radius: 8px;
+}
+
+#newQuote {
+    margin-bottom: 20px;
+    width: 150px;
+    height: 30px;
+}
