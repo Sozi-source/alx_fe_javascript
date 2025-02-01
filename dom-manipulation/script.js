@@ -25,8 +25,20 @@ const newQuoteCategory = document.getElementById ("newQuoteCategory")
 const addQuote = document.getElementById("addQuote")
 
 
+// add new quotes
+function addNewQuotes (){
+    const newQuote = newQuoteText.value.trim()
+    const newCategory = newQuoteCategory.value.trim()
+
+if (newQuote !== "" && newCategory !==""){
+    
+}
 
 
+
+
+
+}
 
 })
 
