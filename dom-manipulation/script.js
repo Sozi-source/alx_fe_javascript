@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
 
+
 // Quotes Array
 // Load quotes from localStorage or use default quotes
 
@@ -110,10 +111,47 @@ function importFromJsonFile(event) {
     document.body.removeChild(a);
 }
 
+// Import and export event listiner
+const exportButton = document.getElementById ("exportBtn")
+exportButton.addEventListener("click", exportToJsonFile)
 
 
+// quote filtering system
+function populateCategories (){
 
+}
 
+document.addEventListener("DOMContentLoaded", function () {
+    loadQuotes();
+    populateCategories();
+    filterQuotes();
+});
+
+// Populate dropdown with unique categories
+function populateCategories() {
+    const categoryDropdown = document.getElementById("categoryFilter");
+    categoryDropdown.innerHTML = `<option value="all">All Categories</option>`;
+
+    [...new Set(quotes.map(q => q.category))].forEach(category => {
+        categoryDropdown.innerHTML += `<option value="${category}">${category}</option>`;
+    });
+
+    // Restore last selected category from localStorage
+    const savedCategory = localStorage.getItem("selectedCategory");
+    if (savedCategory) categoryDropdown.value = savedCategory;
+}
+
+// Filter and display quotes based on selected category
+function filterQuotes() {
+    const selectedCategory = document.getElementById("categoryFilter").value;
+    localStorage.setItem("selectedCategory", selectedCategory);
+
+    const filteredQuotes = selectedCategory === "all" ? quotes : quotes.filter(q => q.category === selectedCategory);
+    
+    document.getElementById("quoteDisplay").innerHTML = filteredQuotes.length
+        ? filteredQuotes.map(q => `<p>"${q.text}" - <strong>${q.category}</strong></p>`).join("")
+        : "<p>No quotes found.</p>";
+}
 
 
 

@@ -48,3 +48,11 @@ border-radius: 8px;
    
    
 }
+
+#exportBtn {
+    margin-top: 15px;
+}
+
+#categoryFilter {
+    margin-top: 15px;
+}
