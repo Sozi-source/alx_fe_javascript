@@ -154,7 +154,7 @@ exportButton.addEventListener("click", exportToJsonFile)
 }
 
 // Function to get filtered quotes based on category
-function getFilteredQuotes() {
+function filterQuote() {
     const selectedCategory = categoryFilter.value;
     return selectedCategory === "all"
         ? quotes
