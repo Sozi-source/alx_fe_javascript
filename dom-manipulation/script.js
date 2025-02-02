@@ -86,7 +86,7 @@ function importFromJsonFile(event) {
     fileReader.onload = function(event) {
       const importedQuotes = JSON.parse(event.target.result);
       quotes.push(...importedQuotes);
-      saveQuotes();
+      saveQuotesToLocalStorage();
       alert('Quotes imported successfully!');
     };
     fileReader.readAsText(event.target.files[0]);
@@ -121,90 +121,106 @@ function populateCategories (){
 
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    loadQuotes();
-    populateCategories();
-    filterQuotes();
-});
+// Simulate Server Interaction
 
-// Populate dropdown with unique categories
-function populateCategories() {
-    const categoryDropdown = document.getElementById("categoryFilter");
-    categoryDropdown.innerHTML = `<option value="all">All Categories</option>`;
+const apiUrl = "https://api.quotable.io/quotes";
 
-    [...new Set(quotes.map(q => q.category))].forEach(category => {
-        categoryDropdown.innerHTML += `<option value="${category}">${category}</option>`;
-    });
-
-    // Restore last selected category from localStorage
-    const savedCategory = localStorage.getItem("selectedCategory");
-    if (savedCategory) categoryDropdown.value = savedCategory;
+// Function to fetch quotes from the server
+async function fetchQuotes() {
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        console.log("Fetched Quotes:", data.results.slice(0, 5)); // API returns an array under `results`
+        localStorage.setItem("quotes", JSON.stringify(data.results)); // Save in local storage
+        return data.results;
+    } catch (error) {
+        console.error("Error fetching quotes:", error);
+    }
 }
 
-// Filter and display quotes based on selected category
-function filterQuotes() {
-    const selectedCategory = document.getElementById("categoryFilter").value;
-    localStorage.setItem("selectedCategory", selectedCategory);
+// post new post to server
+async function postQuote(quote, category) {
+    try {
+        const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ text: quote, category: category })
+        });
+        const data = await response.json();
+        console.log("Quote posted successfully:", data);
+        return data;
+    } catch (error) {
+        console.error("Error posting quote:", error);
+    }
+}
 
-    const filteredQuotes = selectedCategory === "all" ? quotes : quotes.filter(q => q.category === selectedCategory);
+// periodic data syncing
+let syncInterval;
+
+function startQuoteSync(interval = 10000) { // Default: 10 seconds
+    if (syncInterval) clearInterval(syncInterval); // Prevent multiple intervals
+    fetchQuotes(); // Fetch immediately
+    syncInterval = setInterval(fetchQuotes, interval); // Fetch every interval
+}
+
+
+// handle conflict resolution
+async function syncQuotes() {
+    const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
+    const serverQuotes = await fetchQuotes();
     
-    document.getElementById("quoteDisplay").innerHTML = filteredQuotes.length
-        ? filteredQuotes.map(q => `<p>"${q.text}" - <strong>${q.category}</strong></p>`).join("")
-        : "<p>No quotes found.</p>";
+    if (!serverQuotes) return; // Prevent sync if fetch failed
+
+    // Merge quotes: Keep local quotes not found in server
+    const mergedQuotes = [...serverQuotes, ...localQuotes.filter(lq => !serverQuotes.some(sq => sq.text === lq.text))];
+
+    console.log("Merged Quotes:", mergedQuotes);
+    localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
 }
 
 
 
 
+// Creat add quote form
+function createAddQuoteForm (){
 
+    const formContainer = document.createElement ("div");
 
+    // quote input
+    const quoteInput = document.createElement ("input")
+    quoteInput.setAttribute ("id", "newQuoteText")
+    quoteInput.setAttribute ("name", "newQuoteText")
+    quoteInput.setAttribute ("placeholder", "enter a new quote")
 
+    // quote category
+    const quoteCategory = document.createElement ("input")
+    quoteCategory.setAttribute ("id", "newQuoteCategory")
+    quoteCategory.setAttribute ("name", "newQuoteCategory")
+    quoteCategory.setAttribute ("placeholder", "enter quote categoty")
 
+      // Add Quote Button
+      const newQuoteButton = document.createElement ("button")
+      newQuoteButton.textContent = "Add Quote"
+      newQuoteButton.addEventListener = ("click", addQuote)
 
-
-
-
-
-
-
-// // Creat add quote form
-// function createAddQuoteForm (){
-
-//     const formContainer = document.createElement ("div");
-
-//     // quote input
-//     const quoteInput = document.createElement ("input")
-//     quoteInput.setAttribute ("id", "newQuoteText")
-//     quoteInput.setAttribute ("name", "newQuoteText")
-//     quoteInput.setAttribute ("placeholder", "enter a new quote")
-
-//     // quote category
-//     const quoteCategory = document.createElement ("input")
-//     quoteCategory.setAttribute ("id", "newQuoteCategory")
-//     quoteCategory.setAttribute ("name", "newQuoteCategory")
-//     quoteCategory.setAttribute ("placeholder", "enter quote categoty")
-
-//       // Add Quote Button
-//       const newQuoteButton = document.createElement ("button")
-//       newQuoteButton.textContent = "Add Quote"
-//       newQuoteButton.addEventListener = ("click", addQuote)
-
-//        // Append Elements to Form Container
-//        formContainer.appendChild(quoteInput)
-//        formContainer.appendChild(quoteCategory)
-//        formContainer.appendChild(newQuoteButton)
+       // Append Elements to Form Container
+       formContainer.appendChild(quoteInput)
+       formContainer.appendChild(quoteCategory)
+       formContainer.appendChild(newQuoteButton)
        
-//         // Add Form to Body (or another container)
-//  const formbody =document.createElement("body")
-//  formbody.appendChild(formContainer)
-// }
+        // Add Form to Body (or another container)
+ const formbody =document.createElement("body")
+ formbody.appendChild(formContainer)
+}
 
 
-// // Event Listeners
-// addQuote.addEventListener("click", addNewQuotes)
-// addQuote.addEventListener("click", showRandomQuote)
+// Event Listeners
+addQuote.addEventListener("click", addNewQuotes)
+addQuote.addEventListener("click", showRandomQuote)
 
 
 // Implementing Web Storage and JSON Handling
 
 })
+
+
