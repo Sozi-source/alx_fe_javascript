@@ -35,48 +35,43 @@ function saveQuotesToLocalStorage (){
     localStorage.setItem("quotes", JSON.stringify(quotes))
 }
 
+ // Show a random quote when the page loads
+ showRandomQuote();
 
-const newQuoteText = document.getElementById("newQuoteText")
-const newQuoteCategory = document.getElementById ("newQuoteCategory")
-const addQuote = document.getElementById("addQuote")
-const quoteDisplay = document.getElementById ("quoteDisplay")
-const newQuotes = document.getElementById ("newQuote")
+ // Add new quote functionality
+ const newQuoteText = document.getElementById("newQuoteText");
+ const newQuoteCategory = document.getElementById("newQuoteCategory");
+ const addQuoteButton = document.getElementById("addQuote");
+ const newQuoteBtn = document.getElementById("newQuote")
+ const quoteDisplay = document.getElementById ("quoteDisplay")
 
+ function addNewQuote() {
+     const newQuote = newQuoteText.value.trim();
+     const newCategory = newQuoteCategory.value.trim();
 
-// add new quotes
-function addNewQuotes (){
-    const newQuote = newQuoteText.value.trim()
-    const newCategory = newQuoteCategory.value.trim()
+     if (newQuote !== "" && newCategory !== "") {
+         const newQuoteObj = { text: newQuote, category: newCategory };
 
-if (newQuote !== "" && newCategory !==""){
-   const newQuoteObj = {text: newQuote, category:newCategory}
-
-   // Add quote to the array and update local storage
-
-    quotes.push(newQuoteObj)
-    saveQuotesToLocalStorage ()
+         // Add the new quote to the quotes array and update local storage
+         quotes.push(newQuoteObj);
+        //  saveQuotesToLocalStorage();
     
      // Clear input fields
     newQuoteText.value = "";
     newQuoteCategory.value = "";
 
     alert("Quote added successfully")
-
-    // display new quotes
-    showRandomQuote()
-
 }
 else {
     alert("please fill in the right content")
 }
 
 }
+// Add event listiner
+newQuoteBtn.addEventListener("click", showRandomQuote)
+addQuoteButton.addEventListener("click", addNewQuote)
 
-// add event listiner
-addQuote.addEventListener("click", showRandomQuote)
 
-addQuote.addEventListener("click", addNewQuotes)
- newQuotes.addEventListener ("click", showRandomQuote)
 
 
 //  JSON Data Import and Export
@@ -180,7 +175,6 @@ async function syncQuotes() {
 
 
 
-
 // Creat add quote form
 function createAddQuoteForm (){
 
@@ -214,12 +208,9 @@ function createAddQuoteForm (){
 }
 
 
-// Event Listeners
-addQuote.addEventListener("click", addNewQuotes)
-addQuote.addEventListener("click", showRandomQuote)
 
 
-// Implementing Web Storage and JSON Handling
+
 
 })
 
