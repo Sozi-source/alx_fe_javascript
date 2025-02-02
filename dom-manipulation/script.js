@@ -121,7 +121,7 @@ function populateCategories (){
 
 // Simulate Server Interaction
 
-const apiUrl = "https://api.quotable.io/quotes";
+const apiUrl = "https://jsonplaceholder.typicode.com/posts"
 
 // Function to fetch quotes from the server
 // Function to fetch quotes from the server
