@@ -178,10 +178,15 @@ async function syncQuotes() {
 
         console.log("Merged Quotes:", mergedQuotes);
         localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+        
+        console.log("Quotes synced with server!")
+        
     } catch (error) {
         console.error("Error syncing quotes:", error);
     }
+    
 }
+
 
 
 // Creat add quote form
