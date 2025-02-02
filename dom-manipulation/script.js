@@ -91,7 +91,24 @@ function importFromJsonFile(event) {
     fileReader.readAsText(event.target.files[0]);
   }
 
+  
+  function exportToJsonFile() {
+    const quotes = JSON.parse(localStorage.getItem("quotes")) || []; // Get stored quotes
 
+    if (quotes.length === 0) {
+        alert("No quotes to export!");
+        return;
+    }
+
+    const jsonString = JSON.stringify(quotes, null, 2); // Pretty format JSON
+    const blob = new Blob([jsonString], { type: "application/json" }); // Creates a JSON Blob
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "quotes.json"; // Set the file name
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
 
 
 
