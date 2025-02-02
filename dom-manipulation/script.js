@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function(){
 
-
+const categoryFilter = document.getElementById("categoryFilter");
 // Quotes Array
 // Load quotes from localStorage or use default quotes
 
@@ -15,7 +15,27 @@ const quotes =  storeQuotes || [
     { text: "Act as if what you do makes a difference. It does.", category: "Impact" },
     { text: "Keep your face always toward the sunshine—and shadows will fall behind you.", category: "Positivity" },
     { text: "The purpose of our lives is to be happy.", category: "Life" },
-    { text: "Don't watch the clock; do what it does. Keep going.", category: "Hard Work" }
+    { text: "Don't watch the clock; do what it does. Keep going.", category: "Hard Work" },
+    { text: "The only way to do great work is to love what you do.", "category": "Motivation" },
+    { text: "Don’t watch the clock; do what it does. Keep going.", "category": "Motivation" },
+    { text: "Doubt kills more dreams than failure ever will.", "category": "Motivation" },
+    { text: "The future depends on what you do today.", "category": "Motivation" },
+    { text: "Success is not final, failure is not fatal: it is the courage to continue that counts.", "category": "Success" },
+    { text: "Opportunities don't happen. You create them.", "category": "Success" },
+    { text: "The road to success and the road to failure are almost exactly the same.", "category": "Success" },
+    { text: "Your limitation—it's only your imagination.", "category": "Success" },
+    { text: "Happiness depends upon ourselves.", "category": "Happiness" },
+    { text: "The purpose of our lives is to be happy.", "category": "Happiness" },
+    { text: "Happiness is not something ready-made. It comes from your own actions.", "category": "Happiness" },
+    { text: "Do more of what makes you happy.", "category": "Happiness" },
+    { text: "Believe you can and you're halfway there.", "category": "Perseverance" },
+    { text: "Do what you can, with what you have, where you are.", "category": "Perseverance" },
+    { text: "It always seems impossible until it’s done.", "category": "Perseverance" },
+    { text: "Hardships often prepare ordinary people for an extraordinary destiny.", "category": "Perseverance" },
+    { text: "The best way to predict the future is to create it.", "category": "Inspiration" },
+    { text: "Act as if what you do makes a difference. It does.", "category": "Inspiration" },
+    { text: "You are never too old to set another goal or to dream a new dream.", "category": "Inspiration" },
+    { text: "Keep your face always toward the sunshine—and shadows will fall behind you.", "category": "Inspiration" }
 ];
 // Function to Show a Random Quote
 function showRandomQuote(){
@@ -114,16 +134,38 @@ const exportButton = document.getElementById ("exportBtn")
 exportButton.addEventListener("click", exportToJsonFile)
 
 
-// quote filtering system
-function populateCategories (){
+ // Function to populate categories dynamically
+ function populateCategories() {
+    const categories = [...new Set(quotes.map(q => q.category))]; // Extract unique categories
+    categoryFilter.innerHTML = '<option value="all">All Categories</option>'; // Reset dropdown
 
+    categories.forEach(category => {
+        let option = document.createElement("option");
+        option.value = category;
+        option.textContent = category;
+        categoryFilter.appendChild(option);
+    });
+
+    // Restore last selected category from localStorage
+    const lastSelectedCategory = localStorage.getItem("selectedCategory");
+    if (lastSelectedCategory) {
+        categoryFilter.value = lastSelectedCategory;
+    }
 }
+
+// Function to get filtered quotes based on category
+function getFilteredQuotes() {
+    const selectedCategory = categoryFilter.value;
+    return selectedCategory === "all"
+        ? quotes
+        : quotes.filter(quote => quote.category === selectedCategory);
+}
+
 
 // Simulate Server Interaction
 
 const apiUrl = "https://jsonplaceholder.typicode.com/posts"
 
-// Function to fetch quotes from the server
 // Function to fetch quotes from the server
 async function fetchQuotesFromServer() {
     try {
@@ -180,7 +222,7 @@ async function syncQuotes() {
         localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
         
         console.log("Quotes synced with server!")
-        
+
     } catch (error) {
         console.error("Error syncing quotes:", error);
     }
