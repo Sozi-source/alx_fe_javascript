@@ -43,7 +43,7 @@ function saveQuotesToLocalStorage (){
  const newQuoteCategory = document.getElementById("newQuoteCategory");
  const addQuoteButton = document.getElementById("addQuote");
  const newQuoteBtn = document.getElementById("newQuote")
- const quoteDisplay = document.getElementById ("quoteDisplay")
+
 
  function addNewQuote() {
      const newQuote = newQuoteText.value.trim();
@@ -54,24 +54,27 @@ function saveQuotesToLocalStorage (){
 
          // Add the new quote to the quotes array and update local storage
          quotes.push(newQuoteObj);
-        //  saveQuotesToLocalStorage();
+         saveQuotesToLocalStorage();
     
      // Clear input fields
     newQuoteText.value = "";
     newQuoteCategory.value = "";
 
     alert("Quote added successfully")
+
+    showRandomQuote()
 }
 else {
-    alert("please fill in the right content")
+    alert("Please fill in both fields")
 }
 
 }
-// Add event listiner
-newQuoteBtn.addEventListener("click", showRandomQuote)
+// Add event listiner for adding a new quote
 addQuoteButton.addEventListener("click", addNewQuote)
 
+ // Add event listener for showing a new random quote
 
+newQuoteBtn.addEventListener("click", showRandomQuote)
 
 
 //  JSON Data Import and Export
@@ -121,7 +124,8 @@ function populateCategories (){
 const apiUrl = "https://api.quotable.io/quotes";
 
 // Function to fetch quotes from the server
-async function fetchQuotes() {
+// Function to fetch quotes from the server
+async function fetchQuotesFromServer() {
     try {
         const response = await fetch(apiUrl);
         const data = await response.json();
@@ -133,7 +137,7 @@ async function fetchQuotes() {
     }
 }
 
-// post new post to server
+// Post new quote to server
 async function postQuote(quote, category) {
     try {
         const response = await fetch(apiUrl, {
@@ -149,30 +153,35 @@ async function postQuote(quote, category) {
     }
 }
 
-// periodic data syncing
+// Periodic data syncing
 let syncInterval;
 
 function startQuoteSync(interval = 10000) { // Default: 10 seconds
     if (syncInterval) clearInterval(syncInterval); // Prevent multiple intervals
-    fetchQuotes(); // Fetch immediately
-    syncInterval = setInterval(fetchQuotes, interval); // Fetch every interval
+    fetchQuotesFromServer(); // Fetch immediately
+    syncInterval = setInterval(fetchQuotesFromServer, interval); // Fetch every interval
 }
 
-
-// handle conflict resolution
+// Handle conflict resolution during sync
 async function syncQuotes() {
     const localQuotes = JSON.parse(localStorage.getItem("quotes")) || [];
-    const serverQuotes = await fetchQuotes();
     
-    if (!serverQuotes) return; // Prevent sync if fetch failed
+    try {
+        const serverQuotes = await fetchQuotesFromServer();
+        if (!serverQuotes) return; // Prevent sync if fetch failed
 
-    // Merge quotes: Keep local quotes not found in server
-    const mergedQuotes = [...serverQuotes, ...localQuotes.filter(lq => !serverQuotes.some(sq => sq.text === lq.text))];
+        // Merge quotes: Keep local quotes not found on server
+        const mergedQuotes = [
+            ...localQuotes.filter(lq => !serverQuotes.some(sq => sq.text === lq.text)), 
+            ...serverQuotes
+        ];
 
-    console.log("Merged Quotes:", mergedQuotes);
-    localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+        console.log("Merged Quotes:", mergedQuotes);
+        localStorage.setItem("quotes", JSON.stringify(mergedQuotes));
+    } catch (error) {
+        console.error("Error syncing quotes:", error);
+    }
 }
-
 
 
 // Creat add quote form
